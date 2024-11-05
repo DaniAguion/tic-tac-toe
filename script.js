@@ -52,6 +52,19 @@ function makeMove(x, y){
 }
 
 
+
+// Function to let the program make a random move
+function randomMove(){
+    let randomX = 0;
+    let randomY = 0;
+    do{
+        randomX = Math.floor(Math.random() * 3);
+        randomY = Math.floor(Math.random() * 3);
+    } while ((makeMove(randomX, randomY) === false));
+}
+
+
+
 // Function to check if one of the player has won
 function checkWinner(){
     for (let i = 0; i < game.players.length; i++){
@@ -129,6 +142,7 @@ function checkDiagonal(player){
 }
 
 
+
 /*
 
 // TEST
@@ -144,7 +158,9 @@ makeMove(0, 2);
 game.togglePlayer();
 makeMove(0, 0);
 
+
 checkWinner();
+
 
 console.log(game.gameboard);
 console.log(game.result);
