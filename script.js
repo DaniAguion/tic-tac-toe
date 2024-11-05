@@ -28,7 +28,12 @@ const Game = (function(){
 
 
 
+
 const game = new Game();
+
+simGame();
+render();
+
 
 
 
@@ -36,6 +41,8 @@ const game = new Game();
 function player(playerSymbol){
     this.symbol = playerSymbol;
 }
+
+
 
 // Function to set a piece
 function makeMove(x, y){
@@ -106,6 +113,7 @@ function checkRow(player){
 }
 
 
+
 // Function to check if there is a winning column
 function checkColumn(player){
     if (game.winner != ""){
@@ -121,6 +129,7 @@ function checkColumn(player){
         };
     };
 }
+
 
 
 // Function to check diagonal from left corners
@@ -170,28 +179,24 @@ function simGame(){
 }
 
 
-simGame();
+function render(){
+    const gameBoardRow = [];
+    const gameCell = [];
+    const gameArea = document.getElementById("game_area");
 
-/*
+    for (let i = 0; i < game.gameboard.length; i++){
+        gameBoardRow[i] = document.createElement("div");
+        gameBoardRow[i].classList.add("cell");
+        gameArea.appendChild(gameBoardRow[j]);
 
-// TEST
-makeMove(0, 1);
-game.togglePlayer();
-makeMove(1, 0);
-game.togglePlayer();
-makeMove(1, 2);
-game.togglePlayer();
-makeMove(2, 0);
-game.togglePlayer();
-makeMove(0, 2);
-game.togglePlayer();
-makeMove(0, 0);
+        /*
+        // Building ¿Create cell inside row or not?
+        for (let j = 0; ji < game.gameboard.length; j++ ){
+            gameBoardRow[i] = document.createElement("div");
+            gameBoardRow[i].classList.add("cell");
+            gameArea.appendChild(gameBoardRow[i]);
+        }
+        */
+    }
 
-
-checkWinner();
-
-
-console.log(game.gameboard);
-console.log(game.result);
-
-*/
+}
