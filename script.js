@@ -5,7 +5,7 @@ const Game = (function(){
 
     return function(){
         this.gameboard = Array.from({ length: defaultSize }, () => Array(defaultSize).fill(""));
-        this.turn = 0;
+        this.turnLimit = defaultSize* 3;
         this.player1 = new player("o");
         this.player2 = new player("x");
         this.players = [this.player1, this.player2];
@@ -141,7 +141,24 @@ function checkDiagonal(player){
     };
 }
 
+// Function to simulate a game
+function simGame(){
+    for(let turn = 0; turn < game.turnLimit; turn++){   
+        if (turn % 2 === 0){
+            randomMove();
+        }else{
+            randomMove();
+        }   
+        game.togglePlayer();
+    }
 
+    checkWinner();
+    console.log(game.gameboard);
+    console.log(game.result);
+}
+
+
+simGame();
 
 /*
 
