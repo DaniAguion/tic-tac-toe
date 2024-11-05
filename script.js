@@ -36,6 +36,7 @@ const Game = (function(){
 
 const game = new Game();
 const gameAreaElmt = document.getElementById("game_area");
+const gameBoardCells = Array.from({ length: game.gameboard.length }).map(() => Array.from({ length: game.gameboard.length }));
 simGame();
 render();
 printResult();
@@ -202,9 +203,7 @@ function simGame(){
 // Function to redraw the gameboard
 function render(){
     gameAreaElmt.innerHTML = "";
-
     const gameBoardRow = [];
-    const gameBoardCell = [];
 
     for (let i = 0; i < game.gameboard.length; i++){
         gameBoardRow[i] = document.createElement("div");
@@ -212,16 +211,18 @@ function render(){
         gameAreaElmt.appendChild(gameBoardRow[i]);
 
         for (let j = 0; j < game.gameboard.length; j++ ){
-            gameBoardCell[j] = document.createElement("div");
-            gameBoardCell[j].textContent = game.gameboard[i][j];
-            gameBoardCell[j].classList.add("cell");
-            gameBoardRow[i].appendChild(gameBoardCell[j]);
+            gameBoardCells[i][j] = document.createElement("div");
+            gameBoardCells[i][j].textContent = game.gameboard[i][j];
+            gameBoardCells[i][j].classList.add("cell");
+            gameBoardRow[i].appendChild(gameBoardCells[i][j]);
         }
     }
 
 }
 
 
+
+// Function to show the result
 function printResult(){
     const resultCont = document.createElement("div");
     const resultText = document.createElement("p");
