@@ -11,6 +11,7 @@ const Game = (function(){
         this.players = [this.player1, this.player2];
         this.actualPlayer = this.player1;
         this.winner = "";
+        this.result = "";
 
         this.togglePlayer = function(){
             if (this.actualPlayer === this.player1){
@@ -57,6 +58,13 @@ function checkWinner(){
         checkRow(game.players[i]);
         checkColumn(game.players[i]);
         checkDiagonal(game.players[i]);
+    }
+
+    if (game.winner === ""){
+        game.result = "Draw.";
+    }
+    else{
+        game.result = "The winner is " + game.winner + "."
     }
 }
 
@@ -121,10 +129,9 @@ function checkDiagonal(player){
 }
 
 
+/*
 
-/* TEST
-makeMove(1, 1);
-game.togglePlayer();
+// TEST
 makeMove(0, 1);
 game.togglePlayer();
 makeMove(1, 0);
@@ -140,6 +147,6 @@ makeMove(0, 0);
 checkWinner();
 
 console.log(game.gameboard);
-console.log(game.winner);
+console.log(game.result);
 
 */
