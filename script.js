@@ -22,17 +22,35 @@ const Game = (function(){
                 this.actualPlayer = this.player1;               
             }
         }
+
+        this.restartGame= function(){
+            this.turn = 0;
+            this.actualPlayer = this.player1;
+            this.gameboard = this.gameboard.map(row => row.map(() => ""));
+            this.winner = "";
+            this.result = "";
+        }
     };
 })();
 
 
-
-
-
 const game = new Game();
-
+const gameAreaElmt = document.getElementById("game_area");
 simGame();
 render();
+printResult();
+
+
+const startBtn = document.getElementById("startBtn");
+
+
+startBtn.addEventListener("click",function(){
+    game.restartGame();
+    simGame();
+    render();
+    printResult();
+    console.log(game.gameboard);
+});
 
 
 
@@ -174,29 +192,40 @@ function simGame(){
     }
 
     checkWinner();
+
     console.log(game.gameboard);
     console.log(game.result);
 }
 
 
+
+// Function to redraw the gameboard
 function render(){
+    gameAreaElmt.innerHTML = "";
+
     const gameBoardRow = [];
-    const gameCell = [];
-    const gameArea = document.getElementById("game_area");
+    const gameBoardCell = [];
 
     for (let i = 0; i < game.gameboard.length; i++){
         gameBoardRow[i] = document.createElement("div");
-        gameBoardRow[i].classList.add("cell");
-        gameArea.appendChild(gameBoardRow[j]);
+        gameBoardRow[i].classList.add("row");
+        gameAreaElmt.appendChild(gameBoardRow[i]);
 
-        /*
-        // Building ¿Create cell inside row or not?
-        for (let j = 0; ji < game.gameboard.length; j++ ){
-            gameBoardRow[i] = document.createElement("div");
-            gameBoardRow[i].classList.add("cell");
-            gameArea.appendChild(gameBoardRow[i]);
+        for (let j = 0; j < game.gameboard.length; j++ ){
+            gameBoardCell[j] = document.createElement("div");
+            gameBoardCell[j].textContent = game.gameboard[i][j];
+            gameBoardCell[j].classList.add("cell");
+            gameBoardRow[i].appendChild(gameBoardCell[j]);
         }
-        */
     }
 
+}
+
+
+function printResult(){
+    const resultCont = document.createElement("div");
+    const resultText = document.createElement("p");
+    resultText.textContent = game.result;
+    resultCont.appendChild(resultText);
+    gameAreaElmt.appendChild(resultCont);
 }

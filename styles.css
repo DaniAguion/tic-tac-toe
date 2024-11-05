@@ -2,3 +2,23 @@ body{
     text-align: center;
     justify-content: center;
 }
+
+#game_area{
+    margin: 5em;
+}
+
+.row{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.cell{
+    height: 2em;
+    width: 2em;
+    font-size: 2em;
+    align-content:center;
+    background-color: lightgrey;
+    border-width: 0.01em;
+    border-style:solid;
+}
