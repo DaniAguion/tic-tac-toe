@@ -8,6 +8,7 @@ const Game = (function(){
         this.turn = 0;
         this.player1 = new player("o");
         this.player2 = new player("x");
+        this.players = [this.player1, this.player2];
         this.actualPlayer = this.player1;
         this.winner = "";
 
@@ -36,14 +37,27 @@ function player(playerSymbol){
 
 // Function to set a piece
 function makeMove(x, y){
-    game.gameboard[x][y] = game.actualPlayer.symbol;
+    if ((x > game.gameboard.length - 1) || (y > game.gameboard.length - 1)){
+        return false;
+    }
+
+    if (game.gameboard[x][y] === ""){
+        game.gameboard[x][y] = game.actualPlayer.symbol;
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
-// Function to check winner
-function checkWinner(player){
-    checkRow(player);
-    checkColumn(player);
-    //checkDiagonal(player);
+
+// Function to check if one of the player has won
+function checkWinner(){
+    for (let i = 0; i < game.players.length; i++){
+        checkRow(game.players[i]);
+        checkColumn(game.players[i]);
+        checkDiagonal(game.players[i]);
+    }
 }
 
 
@@ -55,9 +69,7 @@ function checkRow(player){
     }
 
     for(let i = 0; i < game.gameboard.length; i++){
-
         for (let j = 0; (game.gameboard[i][j] === player.symbol); j++){
-    
             if (j === game.gameboard.length - 1){
                 game.winner = player.symbol;
                 return;
@@ -67,7 +79,6 @@ function checkRow(player){
 }
 
 
-
 // Function to check if there is a winning column
 function checkColumn(player){
     if (game.winner != ""){
@@ -75,7 +86,6 @@ function checkColumn(player){
     }
 
     for(let j = 0; j < game.gameboard.length; j++){
-
         for (let i = 0; (game.gameboard[i][j] === player.symbol); i++){
             if (i === game.gameboard.length - 1){
                 game.winner = player.symbol;
@@ -85,20 +95,51 @@ function checkColumn(player){
     };
 }
 
+
+// Function to check diagonal from left corners
 function checkDiagonal(player){
     if (game.winner != ""){
         return;
     }
-    // PENDING
 
+    let i = 0;
+    let j = 0;
+
+    for(i = 0, j = 0; (game.gameboard[i][j] === player.symbol); i++, j++){
+        if (j === game.gameboard.length - 1){
+            game.winner = player.symbol;
+            return;
+        };
+    };
+
+    for(i = game.gameboard.length-1, j = 0; (game.gameboard[i][j] === player.symbol); i--, j++){
+        if (j === game.gameboard.length - 1){
+            game.winner = player.symbol;
+            return;
+        };
+    };
 }
 
 
-// TEST
-makeMove(0, 0);
-makeMove(1, 0);
-makeMove(2, 0);
 
-checkWinner(game.actualPlayer);
+/* TEST
+makeMove(1, 1);
+game.togglePlayer();
+makeMove(0, 1);
+game.togglePlayer();
+makeMove(1, 0);
+game.togglePlayer();
+makeMove(1, 2);
+game.togglePlayer();
+makeMove(2, 0);
+game.togglePlayer();
+makeMove(0, 2);
+game.togglePlayer();
+makeMove(0, 0);
+
+checkWinner();
+
 console.log(game.gameboard);
 console.log(game.winner);
+
+*/
