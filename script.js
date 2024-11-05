@@ -5,6 +5,7 @@ const Game = (function(){
 
     return function(){
         this.gameboard = Array.from({ length: defaultSize }, () => Array(defaultSize).fill(""));
+        this.turn = 0;
         this.turnLimit = defaultSize* 3;
         this.player1 = new player("o");
         this.player2 = new player("x");
@@ -73,12 +74,17 @@ function checkWinner(){
         checkDiagonal(game.players[i]);
     }
 
-    if (game.winner === ""){
-        game.result = "Draw.";
-    }
-    else{
+    if (game.winner != ""){
         game.result = "The winner is " + game.winner + "."
+        return true;
     }
+    
+    if (game.turn === game.turnLimit){
+        game.result = "Draw.";
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -141,14 +147,20 @@ function checkDiagonal(player){
     };
 }
 
+
+
 // Function to simulate a game
 function simGame(){
-    for(let turn = 0; turn < game.turnLimit; turn++){   
-        if (turn % 2 === 0){
+    for(game.turn = 0; game.turn < game.turnLimit; game.turn++){   
+        if (game.turn % 2 === 0){
             randomMove();
         }else{
             randomMove();
-        }   
+        }
+
+        if (checkWinner() === true){
+            break;
+        }
         game.togglePlayer();
     }
 
