@@ -5,7 +5,7 @@ const Game = (function(){
 
     return function(){
         this.gameboard = Array.from({ length: defaultSize }, () => Array(defaultSize).fill(""));
-        this.turn = 0;
+        this.turn = 1;
         this.turnLimit = defaultSize* 3;
         this.player1 = new player("o");
         this.player2 = new player("x");
@@ -21,37 +21,39 @@ const Game = (function(){
             else{
                 this.actualPlayer = this.player1;               
             }
+            console.log(this.turn);
+            this.turn++;
         }
 
         this.restartGame= function(){
-            this.turn = 0;
+            this.turn = 1;
             this.actualPlayer = this.player1;
             this.gameboard = this.gameboard.map(row => row.map(() => ""));
             this.winner = "";
             this.result = "";
         }
+
+        render();
     };
 })();
 
 
 const game = new Game();
+
 const gameAreaElmt = document.getElementById("game_area");
-const gameBoardCells = Array.from({ length: game.gameboard.length }).map(() => Array.from({ length: game.gameboard.length }));
-simGame();
-render();
-printResult();
-
-
 const startBtn = document.getElementById("startBtn");
+
+
+render();
+
 
 
 startBtn.addEventListener("click",function(){
     game.restartGame();
-    simGame();
     render();
-    printResult();
     console.log(game.gameboard);
 });
+
 
 
 
@@ -178,6 +180,7 @@ function checkDiagonal(player){
 
 
 // Function to simulate a game
+// Change this function to just make a random move
 function simGame(){
     for(game.turn = 0; game.turn < game.turnLimit; game.turn++){   
         if (game.turn % 2 === 0){
@@ -204,6 +207,7 @@ function simGame(){
 function render(){
     gameAreaElmt.innerHTML = "";
     const gameBoardRow = [];
+    const gameBoardCells = Array.from({ length: game.gameboard.length }).map(() => Array.from({ length: game.gameboard.length }));
 
     for (let i = 0; i < game.gameboard.length; i++){
         gameBoardRow[i] = document.createElement("div");
@@ -213,8 +217,25 @@ function render(){
         for (let j = 0; j < game.gameboard.length; j++ ){
             gameBoardCells[i][j] = document.createElement("div");
             gameBoardCells[i][j].textContent = game.gameboard[i][j];
+            gameBoardCells[i][j].setAttribute("x",i);
+            gameBoardCells[i][j].setAttribute("y",j);
             gameBoardCells[i][j].classList.add("cell");
             gameBoardRow[i].appendChild(gameBoardCells[i][j]);
+            
+
+            // Event listener to check wich cell is clicked
+            // Call makeMove, render, checkWinner and togglePlayer
+            gameBoardCells[i][j].addEventListener("click", () => {
+                const x = parseInt(gameBoardCells[i][j].getAttribute("x"));
+                const y = parseInt(gameBoardCells[i][j].getAttribute("y"));
+                if (makeMove(x, y)) {
+                    render();
+                    if (checkWinner()) {
+                        printResult();
+                    }
+                    game.togglePlayer();
+                }
+            });
         }
     }
 
