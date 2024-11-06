@@ -27,6 +27,8 @@ body{
     height: 2em;
     width: 2em;
     font-size: 2em;
+    font-family: sans-serif;
+    font-weight: bold;
     align-content:center;
     background-color: lightgrey;
     border-width: 0.01em;

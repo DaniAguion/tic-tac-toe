@@ -7,8 +7,8 @@ const Game = (function(){
         this.gameboard = Array.from({ length: defaultSize }, () => Array(defaultSize).fill(""));
         this.turn = 1;
         this.turnLimit = defaultSize* 3;
-        this.player1 = new player("o");
-        this.player2 = new player("x");
+        this.player1 = new player("O");
+        this.player2 = new player("X");
         this.players = [this.player1, this.player2];
         this.actualPlayer = this.player1;
         this.winner = "";
