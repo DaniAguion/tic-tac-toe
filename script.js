@@ -21,7 +21,6 @@ const Game = (function(){
             else{
                 this.actualPlayer = this.player1;               
             }
-            console.log(this.turn);
             this.turn++;
         }
 
@@ -32,26 +31,23 @@ const Game = (function(){
             this.winner = "";
             this.result = "";
         }
-
-        render();
     };
 })();
 
 
+// Initialization area
 const game = new Game();
 
 const gameAreaElmt = document.getElementById("game_area");
 const startBtn = document.getElementById("startBtn");
 
-
 render();
 
 
-
+// Definition of start game event
 startBtn.addEventListener("click",function(){
     game.restartGame();
     render();
-    console.log(game.gameboard);
 });
 
 
@@ -196,9 +192,6 @@ function simGame(){
     }
 
     checkWinner();
-
-    console.log(game.gameboard);
-    console.log(game.result);
 }
 
 
@@ -208,6 +201,9 @@ function render(){
     gameAreaElmt.innerHTML = "";
     const gameBoardRow = [];
     const gameBoardCells = Array.from({ length: game.gameboard.length }).map(() => Array.from({ length: game.gameboard.length }));
+
+    printTurn();
+    printResult();
 
     for (let i = 0; i < game.gameboard.length; i++){
         gameBoardRow[i] = document.createElement("div");
@@ -229,25 +225,34 @@ function render(){
                 const x = parseInt(gameBoardCells[i][j].getAttribute("x"));
                 const y = parseInt(gameBoardCells[i][j].getAttribute("y"));
                 if (makeMove(x, y)) {
-                    render();
-                    if (checkWinner()) {
-                        printResult();
+                    if (checkWinner() === false) {
+                        game.togglePlayer();
+                        printTurn();
                     }
-                    game.togglePlayer();
+                    render();
                 }
             });
         }
     }
-
 }
 
-
+// Function to show the turn
+function printTurn(){
+    const turnContainer = document.getElementById("turn_area");
+    turnContainer.innerHTML="";
+    const turnText = document.createElement("p");
+    turnText.textContent = "It's turn of player: " + game.actualPlayer.symbol;
+    turnContainer.appendChild(turnText);
+}
 
 // Function to show the result
 function printResult(){
-    const resultCont = document.createElement("div");
-    const resultText = document.createElement("p");
-    resultText.textContent = game.result;
-    resultCont.appendChild(resultText);
-    gameAreaElmt.appendChild(resultCont);
+    const resultContainer = document.getElementById("result_area");
+    resultContainer.innerHTML="";
+
+    if (game.result != ""){
+        const resultText = document.createElement("p");
+        resultText.textContent = game.result;
+        resultContainer.appendChild(resultText);
+    }
 }

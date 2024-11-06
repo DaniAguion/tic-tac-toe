@@ -3,8 +3,18 @@ body{
     justify-content: center;
 }
 
+#turn_area{
+    margin: 2em;
+    font-size: 1.2em;
+}
+
 #game_area{
     margin: 5em;
+}
+
+#result_area{
+    margin: 1em;
+    font-size: 1.2em;
 }
 
 .row{
