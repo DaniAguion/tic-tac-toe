@@ -2,12 +2,12 @@
 // Factory Function to create a game
 const Game = (function(){
 
-    const defaultSize = 3;
+    const boardSize = 3;
 
     return function(){
-        this.gameboard = Array.from({ length: defaultSize }, () => Array(defaultSize).fill(""));
+        this.gameboard = Array.from({ length: boardSize }, () => Array(boardSize).fill(""));
         this.turn = 1;
-        this.turnLimit = defaultSize* 3;
+        this.turnLimit = boardSize * boardSize;
         this.player1 = new player("O");
         this.player2 = new player("X");
         this.players = [this.player1, this.player2];
