@@ -1,3 +1,4 @@
+
 // Factory Function to create a game
 const Game = (function(){
 
@@ -12,6 +13,7 @@ const Game = (function(){
         this.players = [this.player1, this.player2];
         this.actualPlayer = this.player1;
         this.winner = "";
+        this.winningLine = [ ];
         this.result = "";
 
         this.togglePlayer = function(){
@@ -29,6 +31,7 @@ const Game = (function(){
             this.actualPlayer = this.player1;
             this.gameboard = this.gameboard.map(row => row.map(() => ""));
             this.winner = "";
+            this.winningLine = [ ];
             this.result = "";
         }
     };
@@ -120,9 +123,12 @@ function checkRow(player){
     }
 
     for(let i = 0; i < game.gameboard.length; i++){
-        for (let j = 0; (game.gameboard[i][j] === player.symbol); j++){
-            if (j === game.gameboard.length - 1){
+        for (let j = 1; j < game.gameboard.length - 1; j++){
+            if ((game.gameboard[i][j] === player.symbol) && (game.gameboard[i][j] === game.gameboard[i][j-1]) && (game.gameboard[i][j] === game.gameboard[i][j+1])){
                 game.winner = player.symbol;
+                game.winningLine.push([i,j-1]);
+                game.winningLine.push([i,j]);
+                game.winningLine.push([i,j+1]);
                 return;
             };
         };
@@ -138,9 +144,12 @@ function checkColumn(player){
     }
 
     for(let j = 0; j < game.gameboard.length; j++){
-        for (let i = 0; (game.gameboard[i][j] === player.symbol); i++){
-            if (i === game.gameboard.length - 1){
+        for (let i = 1; i < game.gameboard.length - 1; i++){
+            if ((game.gameboard[i][j] === player.symbol) && (game.gameboard[i][j] === game.gameboard[i-1][j]) && (game.gameboard[i][j] === game.gameboard[i+1][j])){
                 game.winner = player.symbol;
+                game.winningLine.push([i-1,j]);
+                game.winningLine.push([i,j]);
+                game.winningLine.push([i+1,j]);
                 return;
             };
         };
@@ -195,64 +204,3 @@ function simGame(){
 }
 
 
-
-// Function to redraw the gameboard
-function render(){
-    gameAreaElmt.innerHTML = "";
-    const gameBoardRow = [];
-    const gameBoardCells = Array.from({ length: game.gameboard.length }).map(() => Array.from({ length: game.gameboard.length }));
-
-    printTurn();
-    printResult();
-
-    for (let i = 0; i < game.gameboard.length; i++){
-        gameBoardRow[i] = document.createElement("div");
-        gameBoardRow[i].classList.add("row");
-        gameAreaElmt.appendChild(gameBoardRow[i]);
-
-        for (let j = 0; j < game.gameboard.length; j++ ){
-            gameBoardCells[i][j] = document.createElement("div");
-            gameBoardCells[i][j].textContent = game.gameboard[i][j];
-            gameBoardCells[i][j].setAttribute("x",i);
-            gameBoardCells[i][j].setAttribute("y",j);
-            gameBoardCells[i][j].classList.add("cell");
-            gameBoardRow[i].appendChild(gameBoardCells[i][j]);
-            
-
-            // Event listener to check wich cell is clicked
-            // Call makeMove, render, checkWinner and togglePlayer
-            gameBoardCells[i][j].addEventListener("click", () => {
-                const x = parseInt(gameBoardCells[i][j].getAttribute("x"));
-                const y = parseInt(gameBoardCells[i][j].getAttribute("y"));
-                if (makeMove(x, y)) {
-                    if (checkWinner() === false) {
-                        game.togglePlayer();
-                        printTurn();
-                    }
-                    render();
-                }
-            });
-        }
-    }
-}
-
-// Function to show the turn
-function printTurn(){
-    const turnContainer = document.getElementById("turn_area");
-    turnContainer.innerHTML="";
-    const turnText = document.createElement("p");
-    turnText.textContent = "It's turn of player: " + game.actualPlayer.symbol;
-    turnContainer.appendChild(turnText);
-}
-
-// Function to show the result
-function printResult(){
-    const resultContainer = document.getElementById("result_area");
-    resultContainer.innerHTML="";
-
-    if (game.result != ""){
-        const resultText = document.createElement("p");
-        resultText.textContent = game.result;
-        resultContainer.appendChild(resultText);
-    }
-}

@@ -34,3 +34,7 @@ body{
     border-width: 0.01em;
     border-style:solid;
 }
+
+.WinningCell{
+    background-color: lightgreen;
+}
