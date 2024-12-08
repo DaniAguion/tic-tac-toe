@@ -164,22 +164,28 @@ function checkDiagonal(player){
         return;
     }
 
-    let i = 0;
-    let j = 0;
+    for(let i = 1; i < game.gameboard.length - 1; i++){
+        for(let j = 1; j < game.gameboard.length - 1; j++){
+            // Check diagonals from left top to right bottom
+            if ((game.gameboard[i][j] === player.symbol) && (game.gameboard[i][j] === game.gameboard[i-1][j-1]) && (game.gameboard[i][j] === game.gameboard[i+1][j+1])){
+                game.winner = player.symbol;
+                game.winningLine.push([i-1,j-1]);
+                game.winningLine.push([i,j]);
+                game.winningLine.push([i+1,j+1]);
+                return;
+            };
 
-    for(i = 0, j = 0; (game.gameboard[i][j] === player.symbol); i++, j++){
-        if (j === game.gameboard.length - 1){
-            game.winner = player.symbol;
-            return;
+            // Check diagonals from left bottom to right top
+            if ((game.gameboard[i][j] === player.symbol) && (game.gameboard[i][j] === game.gameboard[i+1][j-1]) && (game.gameboard[i][j] === game.gameboard[i-1][j+1])){
+                game.winner = player.symbol;
+                game.winningLine.push([i+1,j-1]);
+                game.winningLine.push([i,j]);
+                game.winningLine.push([i-1,j+1]);
+                return;
+            };
         };
     };
 
-    for(i = game.gameboard.length-1, j = 0; (game.gameboard[i][j] === player.symbol); i--, j++){
-        if (j === game.gameboard.length - 1){
-            game.winner = player.symbol;
-            return;
-        };
-    };
 }
 
 
